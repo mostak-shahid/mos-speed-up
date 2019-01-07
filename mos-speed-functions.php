@@ -4,6 +4,7 @@ if (!(is_admin() )) {
         if ( FALSE === strpos( $url, '.js' ) ) return $url;
         if ( strpos( $url, 'jquery.js' ) ) return $url;
         // return "$url' defer ";
+        //return "$url' async onload='";
         return "$url' defer onload='";
     }
     add_filter( 'clean_url', 'mos_speed_up_defer_parsing_of_js', 11, 1 );
