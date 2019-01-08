@@ -35,10 +35,19 @@ register_activation_hook(MOS_SPEED_UP_FILE, 'mos_speed_up_activate');
 add_action('admin_init', 'mos_speed_up_redirect');
  
 function mos_speed_up_activate() {
-    $mos_speed_up_option = array();
+    $mos_speed_up_options = array();
     // $mos_speed_up_option['mos_login_type'] = 'basic';
     // update_option( 'mos_speed_up_option', $mos_speed_up_option, false );
     add_option('mos_speed_up_do_activation_redirect', true);
+    $mos_speed_up_options = get_option( 'mos_speed_up_options' );
+    if (!$mos_speed_up_options) {
+      $mos_speed_up_options['query_enable'] = 1;
+      $mos_speed_up_options['query_key'] = array('?ver', '&ver');
+      $mos_speed_up_options['defer_enable'] = 1;
+      $mos_speed_up_options['defer_mode'] = 'defer';
+      $mos_speed_up_options['defer_except'] = array('jquery.js');
+      update_option( 'mos_speed_up_options', $mos_speed_up_options );
+    }
 }
  
 function mos_speed_up_redirect() {
