@@ -1,4 +1,5 @@
 <?php
+$mos_speed_up_options = get_option( 'mos_speed_up_options' );
 function mos_speed_up_admin_enqueue_scripts(){
     global $pagenow, $typenow;
     $page = @$_GET['page']; //page=mos_speed_up_settings
@@ -17,19 +18,46 @@ add_action( 'admin_enqueue_scripts', 'mos_speed_up_admin_enqueue_scripts' );
 
 if (!(is_admin() )) {
     function mos_speed_up_defer_parsing_of_js ( $url ) {
+        global $mos_speed_up_options;
         if ( FALSE === strpos( $url, '.js' ) ) return $url;
-        if ( strpos( $url, 'jquery.js' ) ) return $url;
-        // return "$url' defer ";
+        if (@$mos_speed_up_options['defer_except']) :
+            foreach ($mos_speed_up_options['defer_except'] as $value) :
+                if (@$value) :
+                    if ( strpos( $url, $value ) ) return $url;
+                endif;
+            endforeach;
+        endif;
         //return "$url' async onload='";
-        return "$url' defer onload='";
+        if (@$mos_speed_up_options['defer_mode']) return "$url' ".$mos_speed_up_options['defer_mode']." onload='";
+        else return "$url' defer onload='";
     }
-    add_filter( 'clean_url', 'mos_speed_up_defer_parsing_of_js', 11, 1 );
+    if (@$mos_speed_up_options['defer_enable']) {
+        add_filter( 'clean_url', 'mos_speed_up_defer_parsing_of_js', 11, 1 );
+    }
 }
 /*Remove query string*/
-function mos_speed_up_remove_script_version_one ( $src ){ 
+function mos_speed_up_remove_script ( $src ){
+    $tmp_src = $src;
+    global $mos_speed_up_options;
+    if ($mos_speed_up_options['query_key']) :
+        foreach ($mos_speed_up_options['query_key'] as $value) :
+            if ($value) :
+                $parts = explode( $value, $tmp_src );
+                $tmp_src = $parts[0]; 
+            endif;
+        endforeach;
+    endif;  
+    return $tmp_src; 
+}
+if (@$mos_speed_up_options['query_enable']) {
+    add_filter( 'script_loader_src', 'mos_speed_up_remove_script', 15, 1 ); 
+    add_filter( 'style_loader_src', 'mos_speed_up_remove_script', 15, 1 );
+}
+
+/*function mos_speed_up_remove_script_version_one ( $src ){ 
     $parts = explode( '?ver', $src );  
     return $parts[0]; 
-}
+} 
 function mos_speed_up_remove_script_version_two ( $src ){ 
     $parts = explode( '&ver', $src );  
     return $parts[0]; 
@@ -37,4 +65,4 @@ function mos_speed_up_remove_script_version_two ( $src ){
 add_filter( 'script_loader_src', 'mos_speed_up_remove_script_version_one', 15, 1 ); 
 add_filter( 'style_loader_src', 'mos_speed_up_remove_script_version_one', 15, 1 );
 add_filter( 'script_loader_src', 'mos_speed_up_remove_script_version_two', 15, 1 ); 
-add_filter( 'style_loader_src', 'mos_speed_up_remove_script_version_two', 15, 1 );
+add_filter( 'style_loader_src', 'mos_speed_up_remove_script_version_two', 15, 1 );*/

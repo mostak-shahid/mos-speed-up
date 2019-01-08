@@ -17,4 +17,31 @@
     padding: 10px 15px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+    box-shadow: none;
+    outline: none;
 }
+.acc-group .acc-collapse {
+    background-color: rgba(0,0,0,.02);
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.acc-group .active .acc-collapse {
+    border-top: 1px solid rgba(0,0,0,.05);  
+}
+.acc-group .acc-collapse .form-table {
+    margin-top: 0;
+}
+.acc-group .acc-collapse .field-wrapper {
+    margin-bottom: 10px;
+}
+/* .acc-group .acc-collapse .add-field {
+    display: block;
+    width: 100px;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #0085ba;
+    color: #ffffff;
+    margin-top: 10px;
+} */

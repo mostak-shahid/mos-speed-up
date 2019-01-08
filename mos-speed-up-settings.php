@@ -10,7 +10,8 @@ function mos_speed_up_settings_init() {
 
 	add_settings_section('mos_speed_up_section_query_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
 
-	add_settings_field( 'field_query_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_query_enable_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_enable' ] );
+	add_settings_field( 'field_query_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_query_enable_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_enable' ] );	
+	add_settings_field( 'field_query_key', __( 'Keywords', 'mos_speed_up' ), 'mos_speed_up_field_query_key_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_key' ] );
 
 	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
@@ -23,6 +24,8 @@ function mos_speed_up_settings_init() {
 	add_settings_section('mos_speed_up_section_defer_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
 
 	add_settings_field( 'field_defer_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_defer_enable_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_enable' ] );
+	add_settings_field( 'field_defer_mode', __( 'Mode', 'mos_speed_up' ), 'mos_speed_up_field_defer_mode_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_mode' ] );
+	add_settings_field( 'field_defer_except', __( 'Except', 'mos_speed_up' ), 'mos_speed_up_field_defer_except_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_except' ] );
 
 	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
@@ -54,7 +57,7 @@ function mos_speed_up_section_query_start_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
 	<div id="mos-speed-up-query" class="<?php if($data['active_tab'] == 'query') echo 'active';?>">
-		<div class="acc-heading"><h3 class="acc-title"><a data-id="query" href="javascript:void(0)">Remove query strings</a></h3></div>
+		<div class="acc-heading"><h3 class="acc-title"><a data-id="query" href="javascript:void(0)">Remove query strings from static resources</a></h3></div>
 	<?php
 }
 function mos_speed_up_field_query_enable_cb( $args ) {
@@ -62,6 +65,30 @@ function mos_speed_up_field_query_enable_cb( $args ) {
 	?>	
 		<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to remove query strings from static resources.', 'mos_speed_up' ); ?></label>				
 	<?php
+}
+function mos_speed_up_field_query_key_cb( $args ) {
+	$options = get_option( 'mos_speed_up_options' );
+	$n = 0;
+	?>
+	<div class="clone-wrapper">
+	<?php 
+	if ($options[ $args['label_for'] ]) :
+		foreach ($options[ $args['label_for'] ] as $value) :
+			if ($value)	:
+		?>		
+			<div class="field-wrapper"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[<?php echo $n;?>]" value="<?php echo $value ?>" /></div>		
+		<?php
+			endif;
+		$n++;
+		endforeach;
+		?>
+	<?php else :?>
+			<div class="field-wrapper"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[0]" value="" /></div>
+	<?php endif;?>						
+	</div>
+			<div class="field-wrapper" style="display: none"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[0]" value="" /></div>
+			<a id="add-key-field" href="javascript:void(0)" class="button button-primary">Add More</a>
+	<?php 
 }
 function mos_speed_up_section_defer_start_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
@@ -74,6 +101,40 @@ function mos_speed_up_field_defer_enable_cb( $args ) {
 	$options = get_option( 'mos_speed_up_options' );
 	?>	
 		<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to defer parsing of JavaScript.', 'mos_speed_up' ); ?></label>				
+	<?php
+}
+function mos_speed_up_field_defer_mode_cb( $args ) {
+	$options = get_option( 'mos_speed_up_options' );
+	?>	
+		<select name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]">
+			<option <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'defer', false ) ) : ( '' ); ?> value="defer">defer</option>
+			<option <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'async', false ) ) : ( '' ); ?> value="async">async</option>
+		</select>				
+	<?php
+}
+function mos_speed_up_field_defer_except_cb( $args ) {
+	$options = get_option( 'mos_speed_up_options' );
+	$n = 0;
+	?>
+	<div class="clone-wrapper">
+	<?php 
+	if ($options[ $args['label_for'] ]) :
+		foreach ($options[ $args['label_for'] ] as $value) :
+			if ($value)	:
+		?>		
+			<div class="field-wrapper"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[<?php echo $n;?>]" value="<?php echo $value ?>" /></div>		
+		<?php
+			endif;
+		$n++;
+		endforeach;
+		?>
+	<?php else :?>
+			<div class="field-wrapper"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[0]" value="" /></div>
+	<?php endif;?>						
+	</div>
+			<div class="field-wrapper" style="display: none"><input class="regular-text" name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>[0]" value="" /></div>
+			<a id="add-except-field" href="javascript:void(0)" class="button button-primary">Add More</a>
+						
 	<?php
 }
 
