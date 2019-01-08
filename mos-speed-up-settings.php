@@ -2,12 +2,33 @@
 function mos_speed_up_settings_init() {
 	register_setting( 'mos_speed_up', 'mos_speed_up_options' );
 	
-	add_settings_section('mos_speed_up_section_scripts_start', '', 'mos_speed_up_section_scripts_start_cb', 'mos_speed_up');
-	add_settings_field( 'field_jquery', __( 'JQuery', 'mos_speed_up' ), 'mos_speed_up_field_jquery_cb', 'mos_speed_up', 'mos_speed_up_section_scripts_start', [ 'label_for' => 'jquery', 'class' => 'mos_speed_up_row', 'mos_speed_up_custom_data' => 'custom', ] );
-	add_settings_field( 'field_bootstrap', __( 'Bootstrap', 'mos_speed_up' ), 'mos_speed_up_field_bootstrap_cb', 'mos_speed_up', 'mos_speed_up_section_scripts_start', [ 'label_for' => 'bootstrap', 'class' => 'mos_speed_up_row', 'mos_speed_up_custom_data' => 'custom', ] );
-	add_settings_field( 'field_css', __( 'Custom Css', 'mos_speed_up' ), 'mos_speed_up_field_css_cb', 'mos_speed_up', 'mos_speed_up_section_scripts_start', [ 'label_for' => 'mos_speed_up_css' ] );
-	add_settings_field( 'field_js', __( 'Custom Js', 'mos_speed_up' ), 'mos_speed_up_field_js_cb', 'mos_speed_up', 'mos_speed_up_section_scripts_start', [ 'label_for' => 'mos_speed_up_js' ] );
-	add_settings_section('mos_speed_up_section_scripts_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+	add_settings_section('mos_speed_up_section_con_start', '', 'mos_speed_up_section_con_start_cb', 'mos_speed_up');
+
+	/*Remove query strings from static resources*/
+
+	add_settings_section('mos_speed_up_section_query_start', '', 'mos_speed_up_section_query_start_cb', 'mos_speed_up');
+
+	add_settings_section('mos_speed_up_section_query_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
+
+	add_settings_field( 'field_query_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_query_enable_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_enable' ] );
+
+	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+
+	add_settings_section('mos_speed_up_section_query_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+
+	/*Defer parsing of JavaScript*/
+
+	add_settings_section('mos_speed_up_section_defer_start', '', 'mos_speed_up_section_defer_start_cb', 'mos_speed_up');
+
+	add_settings_section('mos_speed_up_section_defer_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
+
+	add_settings_field( 'field_defer_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_defer_enable_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_enable' ] );
+
+	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+
+	add_settings_section('mos_speed_up_section_defer_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+
+	add_settings_section('mos_speed_up_section_con_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
 }
 add_action( 'admin_init', 'mos_speed_up_settings_init' );
@@ -23,50 +44,46 @@ function get_mos_speed_up_active_tab () {
 	$output['active_tab'] = $active_tab;
 	return $output;
 }
-function mos_speed_up_section_scripts_start_cb( $args ) {
+function mos_speed_up_section_con_start_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
-	<div id="mos-speed-up-scripts" class="tab-con <?php if($data['active_tab'] == 'scripts') echo 'active';?>">
+	<div class="tab-con acc-group">
 	<?php
 }
-function mos_speed_up_field_jquery_cb( $args ) {
+function mos_speed_up_section_query_start_cb( $args ) {
+	$data = get_mos_speed_up_active_tab ();
+	?>
+	<div id="mos-speed-up-query" class="<?php if($data['active_tab'] == 'query') echo 'active';?>">
+		<div class="acc-heading"><h3 class="acc-title"><a data-id="query" href="javascript:void(0)">Remove query strings</a></h3></div>
+	<?php
+}
+function mos_speed_up_field_query_enable_cb( $args ) {
 	$options = get_option( 'mos_speed_up_options' );
-	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_speed_up' ); ?></label>
+	?>	
+		<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to remove query strings from static resources.', 'mos_speed_up' ); ?></label>				
 	<?php
 }
-function mos_speed_up_field_bootstrap_cb( $args ) {
+function mos_speed_up_section_defer_start_cb( $args ) {
+	$data = get_mos_speed_up_active_tab ();
+	?>
+	<div id="mos-speed-up-defer" class="<?php if($data['active_tab'] == 'defer') echo 'active';?>">
+		<div class="acc-heading"><h3 class="acc-title"><a data-id="defer" href="javascript:void(0)">Defer parsing of JavaScript</a></h3></div>
+	<?php
+}
+function mos_speed_up_field_defer_enable_cb( $args ) {
 	$options = get_option( 'mos_speed_up_options' );
-	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_speed_up' ); ?></label>
+	?>	
+		<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to defer parsing of JavaScript.', 'mos_speed_up' ); ?></label>				
 	<?php
 }
-function mos_speed_up_field_css_cb( $args ) {
-	$options = get_option( 'mos_speed_up_option' );
+
+function mos_speed_up_collapse_start_cb( $args ) {
+	$data = get_mos_speed_up_active_tab ();
 	?>
-	<textarea name="mos_speed_up_option[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $options[ $args['label_for'] ] ) ? esc_html_e($options[$args['label_for']]) : '';?></textarea>
-	<script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("mos_speed_up_css"), {
-      lineNumbers: true,
-      mode: "text/css",
-      extraKeys: {"Ctrl-Space": "autocomplete"}
-    });
-	</script>
+	<div class="acc-collapse">
 	<?php
 }
-function mos_speed_up_field_js_cb( $args ) {
-	$options = get_option( 'mos_speed_up_option' );
-	?>
-	<textarea name="mos_speed_up_option[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $options[ $args['label_for'] ] ) ? esc_html_e($options[$args['label_for']]) : '';?></textarea>
-	<script>
-    var editor = CodeMirror.fromTextArea(document.getElementById("mos_speed_up_js"), {
-      lineNumbers: true,
-      mode: "text/css",
-      extraKeys: {"Ctrl-Space": "autocomplete"}
-    });
-	</script>
-	<?php
-}
+
 function mos_speed_up_section_end_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
@@ -77,7 +94,7 @@ function mos_speed_up_section_end_cb( $args ) {
 
 function mos_speed_up_options_page() {
 	//add_menu_page( 'WPOrg', 'WPOrg Options', 'manage_options', 'mos_speed_up', 'mos_speed_up_options_page_html' );
-	add_submenu_page( 'options-general.php', 'Settings', 'Settings', 'manage_options', 'mos_speed_up_settings', 'mos_speed_up_admin_page' );
+	add_submenu_page( 'options-general.php', 'Mos Speed up Settings', 'Mos Speed up', 'manage_options', 'mos_speed_up_settings', 'mos_speed_up_admin_page' );
 }
 add_action( 'admin_menu', 'mos_speed_up_options_page' );
 

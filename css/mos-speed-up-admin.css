@@ -1,0 +1,20 @@
+.mos-speed-up-wrapper .tab-con {
+    padding: 30px;
+    background-color: #ffffff;
+}
+.acc-group > div {
+    margin-bottom: 10px;
+} 
+.acc-group .acc-heading .acc-title {
+    margin: 0;
+}
+.acc-group .acc-heading .acc-title a {
+    text-decoration: none;
+    display: block;
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    padding: 10px 15px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
