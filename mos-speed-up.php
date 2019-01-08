@@ -21,6 +21,7 @@ if ( ! defined( 'MOS_SPEED_UP_SETTINGS' ) ) {
   //define( 'MOS_SPEED_UP_SETTINGS', admin_url('/edit.php?post_type=post_type&page=plugin_settings') );
 	define( 'MOS_SPEED_UP_SETTINGS', admin_url('/options-general.php?page=mos_speed_up_settings') );
 }
+$plugin = plugin_basename(MOS_PLUGIN_FILE); 
 require_once ( plugin_dir_path( __FILE__ ) . 'mos-speed-up-functions.php' );
 require_once ( plugin_dir_path( __FILE__ ) . 'mos-speed-up-settings.php' );
 
