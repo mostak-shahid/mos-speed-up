@@ -3,7 +3,7 @@
 Plugin Name: Mos Speed up
 Plugin URI: http://mostak.belocal.today/plugins/mos-speed-up/
 Description: Increases the speed of your site to improve your scores in Pingdom, GTmetrix, PageSpeed and YSlow. 
-Version: 0.0.1
+Version: 1.0.0
 Author: Md. Mostak Shahid
 Author URI: http://mostak.belocal.today/
 License: GPL2
