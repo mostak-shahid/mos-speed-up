@@ -9,7 +9,7 @@
 
 **Requires at least:** 4.0
 
-**Tested up to:** 4.9.8
+**Tested up to:** 5.0.2
 
 **Requires PHP:** 5.6
 
@@ -46,5 +46,5 @@ This plugin will ONLY remove query strings from resources located inside the HTM
 ## Frequently Asked Questions ##
 Please visit [My Website](http://mostak.belocal.today/) if you have any questions or issues with this plugin.
 
-= What does this do? =
+### What does this do? ###
 This plugin will remove query strings from static resources like CSS & JS files inside the HTML <head> element and defer parsing of JavaScript to improve your speed scores in services like Pingdom, GTmetrix, PageSpeed and YSlow.
