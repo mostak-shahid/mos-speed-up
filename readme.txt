@@ -40,6 +40,7 @@ This plugin will remove query strings from static resources like CSS & JS files 
 == Screenshots ==
 1. Settings Page (Remove query strings from static resources).
 2. Settings Page (Defer parsing of JavaScript).
+3. Settings Page (Specify image dimensions).
 
 == Changelog ==
 

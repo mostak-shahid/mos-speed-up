@@ -148,7 +148,7 @@ function mos_speed_up_section_imgdim_start_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
 	<div id="mos-speed-up-imgdim" class="<?php if($data['active_tab'] == 'imgdim') echo 'active';?>">
-		<div class="acc-heading"><h3 class="acc-title"><a data-id="imgdim" href="javascript:void(0)">Defer parsing of JavaScript</a></h3></div>
+		<div class="acc-heading"><h3 class="acc-title"><a data-id="imgdim" href="javascript:void(0)">Specify image dimensions</a></h3></div>
 	<?php
 }
 function mos_speed_up_field_imgdim_enable_cb( $args ) {
