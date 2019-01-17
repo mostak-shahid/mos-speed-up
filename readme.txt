@@ -36,3 +36,15 @@ Please visit [My Website](http://mostak.belocal.today/) if you have any question
 
 = What does this do? =
 This plugin will remove query strings from static resources like CSS & JS files inside the HTML <head> element and defer parsing of JavaScript to improve your speed scores in services like Pingdom, GTmetrix, PageSpeed and YSlow.
+
+== Screenshots ==
+1. Settings Page (Remove query strings from static resources).
+2. Settings Page (Defer parsing of JavaScript).
+
+== Changelog ==
+
+= 1.0.1 =
+* Specify image dimensions option has added
+
+= 1.0.0 =
+* Basic version

@@ -15,7 +15,15 @@ function mos_speed_up_admin_enqueue_scripts(){
     }
 }
 add_action( 'admin_enqueue_scripts', 'mos_speed_up_admin_enqueue_scripts' );
-
+function mos_speed_up_enqueue_scripts() {
+    global $mos_speed_up_options;
+    wp_enqueue_script( 'jquery' );
+    if (isset($mos_speed_up_options['imgdim_enable']) AND $mos_speed_up_options['imgdim_enable'] == 1) {
+        wp_enqueue_script( 'mos-speed-ajax', plugins_url( 'js/mos-speed-ajax.js', __FILE__ ), array('jquery') );
+        wp_localize_script( 'mos-speed-ajax', 'speed_ajax_url', admin_url( 'admin-ajax.php' ) );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'mos_speed_up_enqueue_scripts' );
 if (!(is_admin() )) {
     function mos_speed_up_defer_parsing_of_js ( $url ) {
         global $mos_speed_up_options;
@@ -54,15 +62,24 @@ if (@$mos_speed_up_options['query_enable']) {
     add_filter( 'style_loader_src', 'mos_speed_up_remove_script', 15, 1 );
 }
 
-/*function mos_speed_up_remove_script_version_one ( $src ){ 
-    $parts = explode( '?ver', $src );  
-    return $parts[0]; 
-} 
-function mos_speed_up_remove_script_version_two ( $src ){ 
-    $parts = explode( '&ver', $src );  
-    return $parts[0]; 
-} 
-add_filter( 'script_loader_src', 'mos_speed_up_remove_script_version_one', 15, 1 ); 
-add_filter( 'style_loader_src', 'mos_speed_up_remove_script_version_one', 15, 1 );
-add_filter( 'script_loader_src', 'mos_speed_up_remove_script_version_two', 15, 1 ); 
-add_filter( 'style_loader_src', 'mos_speed_up_remove_script_version_two', 15, 1 );*/
+/*Specify image dimensions*/
+add_action( 'wp_ajax_get_width', 'my_wp_ajax_noob_get_width_cb' );
+add_action( 'wp_ajax_nopriv_get_width', 'my_wp_ajax_noob_get_width_cb' );
+function my_wp_ajax_noob_get_width_cb(){
+    $src = isset( $_POST['src'] ) ? $_POST['src'] : '';
+    if ($src) {
+        $size = getimagesize($src);
+    }
+    echo $size[0];
+    wp_die();
+}
+add_action( 'wp_ajax_get_height', 'my_wp_ajax_noob_get_height_cb' );
+add_action( 'wp_ajax_nopriv_get_height', 'my_wp_ajax_noob_get_height_cb' );
+function my_wp_ajax_noob_get_height_cb(){
+    $src = isset( $_POST['src'] ) ? $_POST['src'] : '';
+    if ($src) {
+        $size = getimagesize($src);
+    }
+    echo $size[1];
+    wp_die();
+}

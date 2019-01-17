@@ -7,29 +7,36 @@ function mos_speed_up_settings_init() {
 	/*Remove query strings from static resources*/
 
 	add_settings_section('mos_speed_up_section_query_start', '', 'mos_speed_up_section_query_start_cb', 'mos_speed_up');
-
 	add_settings_section('mos_speed_up_section_query_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
 
 	add_settings_field( 'field_query_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_query_enable_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_enable' ] );	
 	add_settings_field( 'field_query_key', __( 'Keywords', 'mos_speed_up' ), 'mos_speed_up_field_query_key_cb', 'mos_speed_up', 'mos_speed_up_section_query_collapse_start', [ 'label_for' => 'query_key' ] );
 
-	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
-
+	add_settings_section('mos_speed_up_section_query_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 	add_settings_section('mos_speed_up_section_query_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
 	/*Defer parsing of JavaScript*/
 
 	add_settings_section('mos_speed_up_section_defer_start', '', 'mos_speed_up_section_defer_start_cb', 'mos_speed_up');
-
 	add_settings_section('mos_speed_up_section_defer_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
 
 	add_settings_field( 'field_defer_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_defer_enable_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_enable' ] );
 	add_settings_field( 'field_defer_mode', __( 'Mode', 'mos_speed_up' ), 'mos_speed_up_field_defer_mode_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_mode' ] );
 	add_settings_field( 'field_defer_except', __( 'Except', 'mos_speed_up' ), 'mos_speed_up_field_defer_except_cb', 'mos_speed_up', 'mos_speed_up_section_defer_collapse_start', [ 'label_for' => 'defer_except' ] );
 
-	add_settings_section('mos_speed_up_section_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
-
+	add_settings_section('mos_speed_up_section_defer_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 	add_settings_section('mos_speed_up_section_defer_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+
+	/*Specify image dimensions*/
+
+	add_settings_section('mos_speed_up_section_imgdim_start', '', 'mos_speed_up_section_imgdim_start_cb', 'mos_speed_up');
+	add_settings_section('mos_speed_up_section_imgdim_collapse_start', '', 'mos_speed_up_collapse_start_cb', 'mos_speed_up');
+
+	add_settings_field( 'field_imgdim_enable', __( 'Enable', 'mos_speed_up' ), 'mos_speed_up_field_imgdim_enable_cb', 'mos_speed_up', 'mos_speed_up_section_imgdim_collapse_start', [ 'label_for' => 'imgdim_enable' ] );
+
+
+	add_settings_section('mos_speed_up_section_imgdim_collapse_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
+	add_settings_section('mos_speed_up_section_imgdim_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
 	add_settings_section('mos_speed_up_section_con_end', '', 'mos_speed_up_section_end_cb', 'mos_speed_up');
 
@@ -137,7 +144,19 @@ function mos_speed_up_field_defer_except_cb( $args ) {
 						
 	<?php
 }
-
+function mos_speed_up_section_imgdim_start_cb( $args ) {
+	$data = get_mos_speed_up_active_tab ();
+	?>
+	<div id="mos-speed-up-imgdim" class="<?php if($data['active_tab'] == 'imgdim') echo 'active';?>">
+		<div class="acc-heading"><h3 class="acc-title"><a data-id="imgdim" href="javascript:void(0)">Defer parsing of JavaScript</a></h3></div>
+	<?php
+}
+function mos_speed_up_field_imgdim_enable_cb( $args ) {
+	$options = get_option( 'mos_speed_up_options' );
+	?>	
+		<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_speed_up_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $options[ $args['label_for'] ] ) ? ( checked( $options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to specify image dimensions.', 'mos_speed_up' ); ?></label>				
+	<?php
+}
 function mos_speed_up_collapse_start_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
@@ -148,7 +167,7 @@ function mos_speed_up_collapse_start_cb( $args ) {
 function mos_speed_up_section_end_cb( $args ) {
 	$data = get_mos_speed_up_active_tab ();
 	?>
-	</div>
+	</div><!--End Section-->
 	<?php
 }
 

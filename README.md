@@ -43,6 +43,15 @@ This plugin will ONLY remove query strings from resources located inside the HTM
 1. Activate the plugin through the "Plugins" menu in WordPress.
 1. That's it.
 
+
+## Changelog ##
+
+### 1.0.1 ###
+* Specify image dimensions option has added
+
+### 1.0.0 ###
+* Basic version
+
 ## Frequently Asked Questions ##
 Please visit [My Website](http://mostak.belocal.today/) if you have any questions or issues with this plugin.
 
