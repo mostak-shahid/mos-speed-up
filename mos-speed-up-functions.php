@@ -46,10 +46,18 @@ if (!(is_admin() )) {
 /*Remove query string*/
 function mos_speed_up_remove_script ( $src ){
     $tmp_src = $src;
+    $not_in = array();
     global $mos_speed_up_options;
+    if (@$mos_speed_up_options['query_except']) {
+        foreach($mos_speed_up_options['query_except'] as $except){
+            if (preg_match('/'.$except.'/', $src)) {
+                $not_in[] = $src;
+            }
+        }
+    }
     if ($mos_speed_up_options['query_key']) :
         foreach ($mos_speed_up_options['query_key'] as $value) :
-            if ($value) :
+            if ($value AND !in_array($value, $not_in)) :
                 $parts = explode( $value, $tmp_src );
                 $tmp_src = $parts[0]; 
             endif;

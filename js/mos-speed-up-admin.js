@@ -21,6 +21,11 @@ jQuery(document).ready(function($) {
     $(this).siblings('.field-wrapper').clone().appendTo('#mos-speed-up-query .clone-wrapper');
     $('#mos-speed-up-query .clone-wrapper > .field-wrapper').attr('style', '');
   });
+  $('.acc-group .acc-collapse #add-except-1-field').click(function(event) {
+    event.preventDefault();
+    $(this).siblings('.field-wrapper').clone().appendTo('#mos-speed-up-query .clone-wrapper');
+    $('#mos-speed-up-query .clone-wrapper > .field-wrapper').attr('style', '');
+  });
   $('.acc-group .acc-collapse #add-except-field').click(function(event) {
     event.preventDefault();
     $(this).siblings('.field-wrapper').clone().appendTo('#mos-speed-up-defer .clone-wrapper');
